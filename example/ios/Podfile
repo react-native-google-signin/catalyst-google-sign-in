@@ -3,7 +3,6 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-#use_frameworks!
 
 target 'CatalystGoogleSignInExample' do
   config = use_native_modules!
@@ -19,13 +18,13 @@ target 'CatalystGoogleSignInExample' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  
+
 #  flipper does not work with mac catalyst
 #  use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
-    
-    
+
+
     # https://github.com/CocoaPods/CocoaPods/issues/8891#issuecomment-573301570
     installer.pods_project.targets.each do |target|
         # Fix bundle targets' 'Signing Certificate' to 'Sign to Run Locally'
