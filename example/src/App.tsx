@@ -1,28 +1,124 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, Text, Button, ScrollView, View } from 'react-native';
 import CatalystGoogleSignIn from 'react-native-catalyst-google-sign-in';
+// @ts-ignore
+import GDrive from 'react-native-google-drive-api-wrapper';
+import { useEffect } from 'react';
 
+const SelectableText = (props: any) => <Text selectable {...props} />;
+
+const stringifier = (json: Record<string, any>) =>
+  JSON.stringify(json, null, 2);
+
+const Divider = () => (
+  <View style={{ height: 1, width: '100%', backgroundColor: 'black' }} />
+);
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [authorizeResult, setAuthorizeResult] = React.useState<any>();
+  const [currentUser, setCurrentUser] = React.useState<any>();
+  const [existingResult, setExistingResult] = React.useState<any>();
+  const [isSignedIn, setIsSignedIn] = React.useState<any>();
+  const [isReset, setIsReset] = React.useState<any>(false);
+  const [fileCreateResult, setFileCreateResult] = React.useState<any>(null);
 
-  React.useEffect(() => {
-    CatalystGoogleSignIn.multiply(3, 7).then(setResult);
+  useEffect(() => {
+    CatalystGoogleSignIn.configure({
+      scopes: ['https://www.googleapis.com/auth/drive'],
+    });
+    CatalystGoogleSignIn.signInSilently().then(setExistingResult);
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <ScrollView style={styles.container}>
+      <SelectableText>
+        signIn result: {stringifier(authorizeResult)}
+      </SelectableText>
+      <Button
+        title={'signIn'}
+        onPress={() => {
+          CatalystGoogleSignIn.signIn().then(setAuthorizeResult);
+        }}
+      />
+      <Divider />
+
+      <SelectableText>
+        existingResult: {stringifier(existingResult)}
+      </SelectableText>
+      <Button
+        title={'signInSilently'}
+        onPress={() => {
+          CatalystGoogleSignIn.signInSilently().then(setExistingResult);
+        }}
+      />
+      <Divider />
+
+      <SelectableText>isSignedIn: {stringifier(isSignedIn)}</SelectableText>
+      <Button
+        title={'isSignedIn'}
+        onPress={() => {
+          CatalystGoogleSignIn.isSignedIn().then(setIsSignedIn);
+        }}
+      />
+      <Divider />
+
+      <SelectableText>
+        getCurrentUser: {stringifier(currentUser)}
+      </SelectableText>
+      <Button
+        title={'getCurrentUser'}
+        onPress={() => {
+          CatalystGoogleSignIn.getCurrentUser().then(setCurrentUser);
+        }}
+      />
+      <Divider />
+
+      <SelectableText>isReset: {stringifier(isReset)}</SelectableText>
+      <Button
+        title={'signOut'}
+        onPress={() => {
+          CatalystGoogleSignIn.signOut().then(setIsReset);
+        }}
+      />
+      <Divider />
+
+      <SelectableText>
+        google drive magic result: {stringifier(fileCreateResult)}
+      </SelectableText>
+      <Button
+        title={'create a file'}
+        onPress={async () => {
+          const { accessToken } = await CatalystGoogleSignIn.getTokens();
+          GDrive.setAccessToken(accessToken);
+          GDrive.init();
+          const contents = 'Welcome from react native!';
+          const isBase64 = false;
+          const result = await GDrive.files.createFileMultipart(
+            contents,
+            'text/plain',
+            {
+              parents: ['root'],
+              name: 'My file',
+            },
+            isBase64
+          );
+          const json = await result.json();
+          setFileCreateResult({
+            result,
+            json,
+          });
+        }}
+      />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    margin: 15,
+    marginTop: 50,
   },
   box: {
     width: 60,
