@@ -1,7 +1,7 @@
 {
-  "name": "react-native-catalyst-google-sign-in",
+  "name": "@react-native-google-signin/catalyst-google-sign-in",
   "version": "0.1.0",
-  "description": "todo",
+  "description": "Google sign in for react native iOS with catalyst support",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
@@ -13,7 +13,7 @@
     "android",
     "ios",
     "cpp",
-    "react-native-catalyst-google-sign-in.podspec",
+    "RNCatalyst-google-sign-in.podspec",
     "!lib/typescript/example",
     "!android/build",
     "!ios/build",
@@ -36,13 +36,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/vonovak/react-native-catalyst-google-sign-in",
+  "repository": "https://github.com/react-native-google-signin/catalyst-google-sign-in",
   "author": "Vojtech Novak <vonovak@gmail.com> (https://github.com/vonovak)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vonovak/react-native-catalyst-google-sign-in/issues"
+    "url": "https://github.com/react-native-google-signin/catalyst-google-sign-inissues"
   },
-  "homepage": "https://github.com/vonovak/react-native-catalyst-google-sign-in#readme",
+  "homepage": "https://github.com/react-native-google-signin/catalyst-google-sign-in#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -111,19 +111,7 @@
     "extends": [
       "@react-native-community",
       "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "quoteProps": "consistent",
-          "singleQuote": true,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "useTabs": false
-        }
-      ]
-    }
+    ]
   },
   "eslintIgnore": [
     "node_modules/",
