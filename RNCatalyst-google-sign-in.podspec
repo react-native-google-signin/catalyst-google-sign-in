@@ -11,13 +11,13 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
 
   s.platforms    = { :ios => "10.0" }
-  s.source       = { :git => "https://github.com/vonovak/react-native-catalyst-google-sign-in.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/react-native-google-signin/catalyst-google-sign-in.git", :tag => "#{s.version}" }
 
-  
+
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-  
+
   s.dependency 'GAppAuth'
-  
+
 
   s.dependency "React-Core"
 end
