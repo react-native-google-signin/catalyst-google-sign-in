@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "react-native-catalyst-google-sign-in": ["./src/index"]
+      "@react-native-google-signin/catalyst-google-sign-in": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

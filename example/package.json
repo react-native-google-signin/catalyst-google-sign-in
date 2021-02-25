@@ -1,6 +1,6 @@
 {
-  "name": "react-native-catalyst-google-sign-in-example",
-  "description": "Example app for react-native-catalyst-google-sign-in",
+  "name": "@react-native-google-signin/catalyst-google-sign-in-example",
+  "description": "Example app for @react-native-google-signin/catalyst-google-sign-in",
   "version": "0.0.1",
   "private": true,
   "scripts": {
