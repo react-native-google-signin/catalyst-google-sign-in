@@ -1,6 +1,6 @@
 {
   "name": "@react-native-google-signin/catalyst-google-sign-in",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Google sign in for react native iOS with catalyst support",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
