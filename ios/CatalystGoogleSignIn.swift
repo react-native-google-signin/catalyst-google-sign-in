@@ -4,6 +4,10 @@ import GAppAuth
 @objc(CatalystGoogleSignIn)
 class CatalystGoogleSignIn: NSObject {
   
+  @objc static func requiresMainQueueSetup() -> Bool {
+    return false
+  }
+  
   @objc func configure(_ options: NSDictionary, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) -> Void {
     if let scopes: Array<String> = options["scopes"] as? Array<String>  {
       for scope in scopes {
