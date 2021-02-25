@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, Text, Button, ScrollView, View } from 'react-native';
-import CatalystGoogleSignIn from 'react-native-catalyst-google-sign-in';
+import CatalystGoogleSignIn from '@react-native-google-signin/catalyst-google-sign-in';
 // @ts-ignore
 import GDrive from 'react-native-google-drive-api-wrapper';
 import { useEffect } from 'react';
@@ -22,6 +22,7 @@ export default function App() {
   const [isSignedIn, setIsSignedIn] = React.useState<any>();
   const [isReset, setIsReset] = React.useState<any>(false);
   const [fileCreateResult, setFileCreateResult] = React.useState<any>(null);
+  const [accessTokens, setAccessTokens] = React.useState<Array<string>>([]);
 
   useEffect(() => {
     CatalystGoogleSignIn.configure({
@@ -83,6 +84,10 @@ export default function App() {
       />
       <Divider />
 
+      <Text>accessTokens</Text>
+      <Text>{accessTokens.join(', ')}</Text>
+      <Divider />
+
       <SelectableText>
         google drive magic result: {stringifier(fileCreateResult)}
       </SelectableText>
@@ -90,9 +95,10 @@ export default function App() {
         title={'create a file'}
         onPress={async () => {
           const { accessToken } = await CatalystGoogleSignIn.getTokens();
+          setAccessTokens((currentTokens) => [...currentTokens, accessToken]);
           GDrive.setAccessToken(accessToken);
           GDrive.init();
-          const contents = 'Welcome from react native!';
+          const contents = `Welcome from react native! ${new Date().toISOString()}`;
           const isBase64 = false;
           const result = await GDrive.files.createFileMultipart(
             contents,

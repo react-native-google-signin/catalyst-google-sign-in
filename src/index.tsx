@@ -40,17 +40,13 @@ type GoogAuthResponse = {
 type CatalystGoogleSignInType = {
   configure(opts: ConfigParam): Promise<null>;
   retrieveExistingAuthorizationState(opts: ConfigParam): Promise<AuthState>;
+  getTokens(): Promise<{ accessToken: string; idToken: string }>;
   signIn(opts: ConfigParam): Promise<AuthState>;
   isSignedIn(): Promise<boolean>;
   resetAuthorizationState(): Promise<null>;
 };
 
 const TypedCatalystGoogleSignIn: CatalystGoogleSignInType = CatalystGoogleSignIn;
-
-export const BASIC_SCOPES = {
-  profile: 'profile',
-  drive: 'https://www.googleapis.com/auth/drive',
-};
 
 let configPromise = Promise.resolve(null);
 
@@ -127,18 +123,12 @@ async function getCurrentUser(): Promise<RNGoogleSignInReturnType | null> {
 }
 
 async function getTokens(): Promise<{
-  refreshToken: string;
+  idToken: string;
   accessToken: string;
 }> {
   await configPromise;
-  const {
-    refreshToken,
-    accessToken,
-  } = await TypedCatalystGoogleSignIn.retrieveExistingAuthorizationState({});
-  return {
-    refreshToken,
-    accessToken,
-  };
+  const tokens = await TypedCatalystGoogleSignIn.getTokens();
+  return tokens;
 }
 
 async function signOut() {

@@ -1,6 +1,6 @@
 {
   "name": "@react-native-google-signin/catalyst-google-sign-in",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Google sign in for react native iOS with catalyst support",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -44,7 +44,8 @@
   },
   "homepage": "https://github.com/react-native-google-signin/catalyst-google-sign-in#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
@@ -95,7 +96,8 @@
       "tagName": "v${version}"
     },
     "npm": {
-      "publish": true
+      "publish": true,
+      "skipChecks": true
     },
     "github": {
       "release": true

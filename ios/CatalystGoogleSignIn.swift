@@ -26,12 +26,22 @@ class CatalystGoogleSignIn: NSObject {
     resolver(NSNull())
   }
   
-  @objc func getTokens(_ resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock) -> Void {
+  @objc func getTokens(_ resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) -> Void {
     if (!GAppAuth.shared.isAuthorized()) {
       rejecter("getTokens", "getTokens requires a user to be signed in", nil)
     }
     
-    resolver(self.getDictFromAuthState())
+    GAppAuth.shared.getCurrentAuthorization()?.authState.performAction(freshTokens: { (accessToken, idToken, error) in
+      if (error != nil) {
+        rejecter("getTokens", "obtaining tokens failed", error)
+      } else {
+        let dict = [
+          "accessToken": accessToken,
+          "idToken": idToken,
+        ]
+        resolver(dict)
+      }
+    })
   }
   
   @objc func retrieveExistingAuthorizationState(_ options: NSDictionary, resolver:RCTPromiseResolveBlock, rejecter:RCTPromiseRejectBlock) -> Void {
@@ -80,23 +90,23 @@ class CatalystGoogleSignIn: NSObject {
       "idToken": tokenResponse?.idToken ?? "",
       "scopes": tokenResponse?.scope ?? "",
       "email": authorization?.userEmail,
-      "serverAuthCode": serverAuthCode
+      "serverAuthCode": serverAuthCode,
     ]
     return dict
   }
   
-//  does not appear to be needed actually
-//  func watchUpdates() {
-//    GAppAuth.shared.stateChangeCallback = { (state: OIDAuthState) -> Void in
-//      let dict = self.getDictFromAuthState()
-//      print(dict)
-//    }
-//    GAppAuth.shared.errorCallback = { state, err -> Void in
-//      let dict = self.getDictFromAuthState()
-//      print(dict)
-//      print(err)
-//    }
-//  }
+  //  does not appear to be needed actually
+  //  func watchUpdates() {
+  //    GAppAuth.shared.stateChangeCallback = { (state: OIDAuthState) -> Void in
+  //      let dict = self.getDictFromAuthState()
+  //      print(dict)
+  //    }
+  //    GAppAuth.shared.errorCallback = { state, err -> Void in
+  //      let dict = self.getDictFromAuthState()
+  //      print(dict)
+  //      print(err)
+  //    }
+  //  }
   
   @objc static func application(app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     let willContinueWithAuth = GAppAuth.shared.continueAuthorization(with: url, callback: nil)
