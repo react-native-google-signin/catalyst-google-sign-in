@@ -37,7 +37,7 @@ class CatalystGoogleSignIn: NSObject {
     
     GAppAuth.shared.getCurrentAuthorization()?.authState.performAction(freshTokens: { (accessToken, idToken, error) in
       if (error != nil) {
-        rejecter("getTokens", "obtaining tokens failed", error)
+        rejecter("getTokens", error?.localizedDescription, error)
       } else {
         let dict = [
           "accessToken": accessToken,
@@ -69,14 +69,14 @@ class CatalystGoogleSignIn: NSObject {
                 resolver(dict)
               }
             } else {
-              rejecter("no_auth", "login cancelled/failed", NSError.init(domain: "login_failed", code: 1, userInfo: nil))
+              rejecter("signIn", "login cancelled/failed", NSError.init(domain: "login_failed", code: 1, userInfo: nil))
             }
           }
         } catch let error {
-          rejecter("auth_err", error.localizedDescription, error)
+          rejecter("signIn", error.localizedDescription, error)
         }
       } else {
-        rejecter("no_viewController", "no viewcontroller to present login ui in", NSError.init(domain: "no_viewController", code: 2, userInfo: nil))
+        rejecter("signIn", "no viewcontroller to present login ui in", NSError.init(domain: "no_viewController", code: 2, userInfo: nil))
       }
     }
   }
