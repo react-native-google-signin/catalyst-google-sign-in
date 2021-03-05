@@ -108,7 +108,11 @@ async function signInSilently(): Promise<RNGoogleSignInReturnType> {
     {}
   );
   if (!existingAuth) {
-    throw new Error('user not signed in');
+    const error = new Error('SIGN_IN_REQUIRED');
+    // imitate GIDSignInErrorCode kGIDSignInErrorCodeHasNoAuthInKeychain
+    // @ts-ignore
+    error.code = -4;
+    throw error;
   }
   const result = await getReturnObject(existingAuth);
   return result;
@@ -135,10 +139,16 @@ async function signOut() {
   return await TypedCatalystGoogleSignIn.resetAuthorizationState();
 }
 
-async function revokeAccess() {
-  // NOOP
-  // TODO https://github.com/google/GTMAppAuth/issues/9
-  return null;
+async function revokeAccess(accessToken: string) {
+  // see https://github.com/google/GTMAppAuth/issues/9
+  const revokeUrl = `https://oauth2.googleapis.com/revoke?token=${accessToken}`;
+  return fetch(revokeUrl, { method: 'POST' }).then((resp) => {
+    if (resp.ok) {
+      return null;
+    } else {
+      throw new Error('error revoking token, status: ' + resp.status);
+    }
+  });
 }
 
 export default {
