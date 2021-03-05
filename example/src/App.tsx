@@ -19,10 +19,11 @@ export default function App() {
   const [authorizeResult, setAuthorizeResult] = React.useState<any>();
   const [currentUser, setCurrentUser] = React.useState<any>();
   const [existingResult, setExistingResult] = React.useState<any>();
+  const [revokeResult, setRevokeResult] = React.useState<any>();
   const [isSignedIn, setIsSignedIn] = React.useState<any>();
   const [isReset, setIsReset] = React.useState<any>(false);
   const [fileCreateResult, setFileCreateResult] = React.useState<any>(null);
-  const [accessTokens, setAccessTokens] = React.useState<Array<string>>([]);
+  const [accessToken, setAccessToken] = React.useState('');
 
   useEffect(() => {
     CatalystGoogleSignIn.configure({
@@ -84,8 +85,13 @@ export default function App() {
       />
       <Divider />
 
-      <Text>accessTokens</Text>
-      <Text>{accessTokens.join(', ')}</Text>
+      <SelectableText>revokeResult: {stringifier(revokeResult)}</SelectableText>
+      <Button
+        title={'revoke access'}
+        onPress={() => {
+          CatalystGoogleSignIn.revokeAccess(accessToken).then(setRevokeResult);
+        }}
+      />
       <Divider />
 
       <SelectableText>
@@ -94,9 +100,9 @@ export default function App() {
       <Button
         title={'create a file'}
         onPress={async () => {
-          const { accessToken } = await CatalystGoogleSignIn.getTokens();
-          setAccessTokens((currentTokens) => [...currentTokens, accessToken]);
-          GDrive.setAccessToken(accessToken);
+          const { accessToken: token } = await CatalystGoogleSignIn.getTokens();
+          setAccessToken(token);
+          GDrive.setAccessToken(token);
           GDrive.init();
           const contents = `Welcome from react native! ${new Date().toISOString()}`;
           const isBase64 = false;
