@@ -1,5 +1,8 @@
 # @react-native-google-signin/catalyst-google-sign-in
 
+Deprecated: please use https://github.com/react-native-google-signin/google-signin
+
+
 This is an implementation of google sign for react native (supports iOS only!) which supports Mac Catalyst.
 
 The api is very similar to the existing [react-native-google-signin](https://github.com/react-native-google-signin/google-signin)
